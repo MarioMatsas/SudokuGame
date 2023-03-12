@@ -1,5 +1,3 @@
-from sudoku_generator import generateBoard
-
 #Check if the number you want to place appears in the same row 
 def checkHorizontal(row, num, board):
     for col in range(9):
