@@ -1,5 +1,5 @@
 import pygame
-import sudoku_generator as sudoku_generator
+import sudoku_generator
 from sudoku_solver import solve
 from copy import deepcopy
 
