@@ -40,8 +40,10 @@ def showSolution():
         for i in range(9):
             for j in range(9):
                 #Set text colour in case the input is the correct one, there is no input, or th einput is wrong
-                if solvedCopy[i][j] == board[i][j]:
+                if solvedCopy[i][j] == board[i][j] and board[i][j] == boardCopy[i][j]: #The colour of the original numbers stays the same
                     textColour = (20, 20, 20)
+                elif solvedCopy[i][j] == board[i][j]:
+                    textColour = (30, 0, 255)
                 elif board[i][j] == 0:
                     textColour = (211, 211, 211) 
                 else:
@@ -56,10 +58,14 @@ def showSolution():
             for j in range(9):
                 #Hide the solution
                 pygame.draw.rect(window, (251, 240, 230), ((j + 1)*50 + BUFFER, (i + 1)*50 + BUFFER, 50 - 2*BUFFER, 50 - 2*BUFFER))
-                if board[i][j] > 0:
-                    placeNumber(board, i, j, (0, 0, 0), font)
+                #Check whether a number has been placed in by the user
+                if board[i][j] > 0 and board[i][j] == boardCopy[i][j]:
+                    placeNumber(board, i, j, (20, 20, 20), font)
+                elif board[i][j] > 0:
+                    placeNumber(board, i, j, (30, 0, 255), font)
         clicks += 1
 
+        
 def newBoard():
     global clicks
     global board
@@ -77,10 +83,34 @@ def newBoard():
         for j in range(9):
             pygame.draw.rect(window, (251, 240, 230), ((j + 1)*50 + BUFFER, (i + 1)*50 + BUFFER, 50 - 2*BUFFER, 50 - 2*BUFFER))
             if board[i][j] > 0:
-                placeNumber(board, i, j, (0, 0, 0), font)
-    pygame.display.update()    
+                placeNumber(board, i, j, (20, 20, 20), font)
+    pygame.display.update()  
+    
 
-
+def insert(window, position):
+    i, j = position[1], position[0]
+    font = pygame.font.SysFont("Times New Roman", 30)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+            if event.type == pygame.KEYDOWN:
+                if(boardCopy[i - 1][j - 1] != 0):
+                    return
+                #When placing a new number in a filled spot, covers the previous number
+                pygame.draw.rect(window, (251, 240, 230), (position[0]*50 + BUFFER, position[1]*50 + BUFFER, 50 - 2*BUFFER, 50 - 2*BUFFER))
+                if event.key == 48: #48 is the ASCII presentation of 0
+                    board[i - 1][j - 1] = event.key - 48
+                    pygame.display.update()
+                    return
+                if 0 < event.key - 48 < 10: #Making sure the values inputed are valid
+                    char = font.render(str(event.key - 48), True, (20, 20, 20))
+                    window.blit(char, (position[0]*50 + 17, position[1]*50 + 11))
+                    board[i - 1][j - 1] = event.key - 48
+                    pygame.display.update()
+                    return
+                return
+            
 
 class Button():
     def __init__(self, x, y, image, text, text_x, text_y, text_size, scale = 1):
@@ -118,32 +148,7 @@ class Button():
         char = font.render(self.text, True, (20, 20, 20))
         window.blit(char, (self.text_x, self.text_y)) #Cordinates give us the distance form the y and x axis
 
-
-
-def insert(window, position):
-    i, j = position[1], position[0]
-    font = pygame.font.SysFont("Times New Roman", 30)
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-            if event.type == pygame.KEYDOWN:
-                if(boardCopy[i - 1][j - 1] != 0):
-                    return
-                #When placing a new number in a filled spot, covers the previous number
-                pygame.draw.rect(window, (251, 240, 230), (position[0]*50 + BUFFER, position[1]*50 + BUFFER, 50 - 2*BUFFER, 50 - 2*BUFFER))
-                if event.key == 48: #48 is the ASCII presentation of 0
-                    board[i - 1][j - 1] = event.key - 48
-                    pygame.display.update()
-                    return
-                if 0 < event.key - 48 < 10: #Making sure the values inputed are valid
-                    char = font.render(str(event.key - 48), True, (20, 20, 20))
-                    window.blit(char, (position[0]*50 + 17, position[1]*50 + 11))
-                    board[i - 1][j - 1] = event.key - 48
-                    pygame.display.update()
-                    return
-                return
-
+        
 def main():
     global clicks
     global board
@@ -196,7 +201,7 @@ def main():
     for i in range(9):
         for j in range(9):
             if board[i][j] > 0:
-                placeNumber(board, i, j, (0, 0, 0), font)
+                placeNumber(board, i, j, (20, 20, 20), font)
     
     pygame.display.update()
 
