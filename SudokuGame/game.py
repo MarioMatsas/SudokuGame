@@ -11,7 +11,7 @@ HEIGHT = 700
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 #Game difficulty(set to default)
-difficulty = 350
+difficulty = 250
 
 #Get a valid sudoku board
 board = sudoku_generator.generateBoard(difficulty)
@@ -219,13 +219,13 @@ def main():
                 difficulty = 100
                 newBoard()
             if medium.clickButton():
-                difficulty = 350
+                difficulty = 250
                 newBoard()
             if hard.clickButton():
-                difficulty = 550
+                difficulty = 450
                 newBoard()
             if extreme.clickButton():
-                difficulty = 700
+                difficulty = 600
                 newBoard()     
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 position = pygame.mouse.get_pos()
