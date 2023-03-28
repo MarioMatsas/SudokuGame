@@ -159,7 +159,7 @@ def main():
     #Initializing pygame
     pygame.init() 
     
-    basicImage = pygame.image.load("test.png").convert_alpha()
+    basicImage = pygame.image.load("SudokuGame/test.png").convert_alpha()
 
 
     #Creating the buttons
